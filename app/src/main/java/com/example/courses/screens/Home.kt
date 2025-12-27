@@ -9,11 +9,12 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 
 @Composable
-fun Home() {
+fun Home(
+    counter: Int,
+    onIncrement: () -> Unit
+) {
     // Basic counter to display on screen
-    var counter by remember {
-        mutableIntStateOf(0)
-    }
+
     // Box to center Items
     Box(
         modifier = Modifier
@@ -27,7 +28,7 @@ fun Home() {
             Spacer(modifier = Modifier.height(20.dp))
 
             // Button increases the counter
-            Button(onClick = { counter++ }) {
+            Button(onClick = onIncrement) {
                 Text(text = "Increment Counter", color = Color.White)
             }
 

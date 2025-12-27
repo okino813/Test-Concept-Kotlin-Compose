@@ -23,6 +23,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -54,7 +57,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ScreenMain(
     navController: NavHostController,
-    padding: PaddingValues
+    padding: PaddingValues,
+    counter: Int,
+    onIncrement: () -> Unit
 ) {
 
     NavHost(
@@ -62,10 +67,21 @@ fun ScreenMain(
         startDestination = "home",
         modifier = Modifier.padding(padding)
     ) {
-        Constants.BottomNavItems.forEach { item ->
-            composable(item.route) {
-                item.composable()
-            }
+
+        composable(Constants.BottomNavItems[0].route) {
+            Home(counter = counter, onIncrement = onIncrement)
+        }
+
+        composable(Constants.BottomNavItems[1].route) {
+            Constants.BottomNavItems[1].composable()
+        }
+
+        composable(Constants.BottomNavItems[2].route) {
+            Constants.BottomNavItems[2].composable()
+        }
+
+        composable(Constants.BottomNavItems[3].route) {
+            Constants.BottomNavItems[3].composable()
         }
     }
 }
@@ -123,11 +139,11 @@ fun BottomNavigationBar(navController: NavHostController) {
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
 fun MyApp(){
     val context = LocalContext.current
     val navController = rememberNavController()
+    var counter by remember { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -151,7 +167,12 @@ fun MyApp(){
 
         content = { padding ->
             // Nav host: where screens are placed
-            ScreenMain(navController = navController, padding = padding)
+            ScreenMain(
+                navController = navController,
+                padding = padding,
+                counter = counter,
+                onIncrement = { counter++ }
+                )
         },
 
         // bottom app bar
